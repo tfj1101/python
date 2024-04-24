@@ -8,7 +8,7 @@ import sys
 import uuid
 
 FONT_SIZES = [7, 8, 9, 10, 11, 12, 13, 14, 18, 24, 36, 48, 64, 72, 96, 144, 288]
-IMAGE_EXTENSIONS = [".jpg", ".png", ".bmp"]
+# IMAGE_EXTENSIONS = [".jpg", ".png", ".bmp"]
 HTML_EXTENSIONS = [".htm", ".html"]
 
 
@@ -20,39 +20,39 @@ def splitext(p):
     return os.path.splitext(p)[1].lower()
 
 
-class TextEdit(QTextEdit):
-    def canInsertFromMimeData(self, source):
-        if source.hasImage():
-            return True
-        else:
-            return super(TextEdit, self).canInsertFromMimeData(source)
-    # 此函数用于将源指定的MIME数据对象的内容插入到当前光标位置的文本编辑中。
-    # 每当由于剪贴板粘贴操作而插入文本时，或当文本编辑从拖放操作接受数据时，都会调用该函数。
-    # 重新实现此函数以启用对其他MIME类型的拖放支持。
-    def insertFromMimeData(self, source):
-        cursor = self.textCursor()
-        document = self.document()
-
-        if source.hasUrls():
-            for u in source.urls():
-                file_ext = splitext(str(u.toLocalFile()))
-                if u.isLocalFile() and file_ext in IMAGE_EXTENSIONS:
-                    image = QImage(u.toLocalFile())
-                    document.addResource(QTextDocument.ImageResource, u, image)
-                    cursor.insertImage(u.toLocalFile())
-                else:
-                    break
-            else:
-                return
-
-        elif source.hasImage():
-            image = source.imageData()
-            uuid = hexuuid()
-            document.addResource(QTextDocument.ImageResource, uuid, image)
-            cursor.insertImage(uuid)
-            return
-
-        super(TextEdit, self).insertFromMimeData(source)
+# class TextEdit(QTextEdit):
+#     def canInsertFromMimeData(self, source):
+#         if source.hasImage():
+#             return True
+#         else:
+#             return super(TextEdit, self).canInsertFromMimeData(source)
+#     # 此函数用于将源指定的MIME数据对象的内容插入到当前光标位置的文本编辑中。
+#     # 每当由于剪贴板粘贴操作而插入文本时，或当文本编辑从拖放操作接受数据时，都会调用该函数。
+#     # 重新实现此函数以启用对其他MIME类型的拖放支持。
+#     def insertFromMimeData(self, source):
+#         cursor = self.textCursor()
+#         document = self.document()
+#
+#         if source.hasUrls():
+#             for u in source.urls():
+#                 file_ext = splitext(str(u.toLocalFile()))
+#                 if u.isLocalFile() and file_ext in IMAGE_EXTENSIONS:
+#                     image = QImage(u.toLocalFile())
+#                     document.addResource(QTextDocument.ImageResource, u, image)
+#                     cursor.insertImage(u.toLocalFile())
+#                 else:
+#                     break
+#             else:
+#                 return
+#
+#         elif source.hasImage():
+#             image = source.imageData()
+#             uuid = hexuuid()
+#             document.addResource(QTextDocument.ImageResource, uuid, image)
+#             cursor.insertImage(uuid)
+#             return
+#
+#         super(TextEdit, self).insertFromMimeData(source)
 
 
 class MainWindow(QMainWindow):
@@ -60,7 +60,7 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__(*args, **kwargs)
 
         layout = QVBoxLayout()
-        self.editor = TextEdit()
+        self.editor = QTextEdit()
         self.editor.setAutoFormatting(QTextEdit.AutoAll)
         self.editor.selectionChanged.connect(self.update_format)
 
@@ -73,16 +73,16 @@ class MainWindow(QMainWindow):
         container = QWidget()
         container.setLayout(layout)
         self.setCentralWidget(container)
-        self.status = QStatusBar()
-        self.setStatusBar(self.status)
+        # self.status = QStatusBar()
+        # self.setStatusBar(self.status)
 
         file_toolbar = QToolBar("文件")
-        file_toolbar.setIconSize(QSize(14, 14))
+        file_toolbar.setIconSize(QSize(25, 25))
         self.addToolBar(file_toolbar)
         file_menu = self.menuBar().addMenu("&文件")
 
         open_file_action = QAction(
-            QIcon(os.path.join("images", "blue-folder-open-document.png")),
+            QIcon("D:/python_study/python课程设计/Typora/icon/打开文件.png"),
             "打开文件",
             self,
         )
@@ -92,43 +92,46 @@ class MainWindow(QMainWindow):
         file_toolbar.addAction(open_file_action)
 
         save_file_action = QAction(
-            QIcon(os.path.join("images", "disk.png")), "保存", self
+            QIcon(os.path.join("Typora/icon", "保存文件.png")), "保存", self
         )
+
+        print(os.path.join("Typora/icon", "保存文件.png"))
         save_file_action.setStatusTip("保存到本地磁盘..")
         save_file_action.triggered.connect(self.file_save)
         file_menu.addAction(save_file_action)
         file_toolbar.addAction(save_file_action)
 
         saveas_file_action = QAction(
-            QIcon(os.path.join("images", "disk--pencil.png")), "另存为", self
+            QIcon(os.path.join("Typora/icon", "另存为.png")), "另存为",
+            self
         )
         saveas_file_action.setStatusTip("另存为文件..")
         saveas_file_action.triggered.connect(self.file_saveas)
         file_menu.addAction(saveas_file_action)
         file_toolbar.addAction(saveas_file_action)
 
-        print_action = QAction(
-            QIcon(os.path.join("images", "printer.png")), "打印", self
-        )
-        print_action.setStatusTip("打印本页..")
-        print_action.triggered.connect(self.file_print)
-        file_menu.addAction(print_action)
-        file_toolbar.addAction(print_action)
+        # print_action = QAction(
+        #     QIcon(os.path.join("images", "printer.png")), "打印", self
+        # )
+        # print_action.setStatusTip("打印本页..")
+        # print_action.triggered.connect(self.file_print)
+        # file_menu.addAction(print_action)
+        # file_toolbar.addAction(print_action)
 
         edit_toolbar = QToolBar("编辑")
-        edit_toolbar.setIconSize(QSize(16, 16))
+        edit_toolbar.setIconSize(QSize(20, 20))
         self.addToolBar(edit_toolbar)
         edit_menu = self.menuBar().addMenu("&编辑")
 
         undo_action = QAction(
-            QIcon(os.path.join("images", "arrow-curve-180-left.png")), "撤回", self
+            QIcon(os.path.join("Typora/icon", "撤回.png")), "撤回", self
         )
         undo_action.setStatusTip("撤回上一个操作..")
         undo_action.triggered.connect(self.editor.undo)
         edit_menu.addAction(undo_action)
 
         redo_action = QAction(
-            QIcon(os.path.join("images", "arrow-curve.png")), "重做", self
+            QIcon(os.path.join("Typora/icon", "重做.png")), "重做", self
         )
         redo_action.setStatusTip("重做撤回的操作..")
         redo_action.triggered.connect(self.editor.redo)
@@ -138,7 +141,7 @@ class MainWindow(QMainWindow):
         edit_menu.addSeparator()
 
         cut_action = QAction(
-            QIcon(os.path.join("images", "scissors.png")), "剪切", self
+            QIcon(os.path.join("Typora/icon", "剪切.png")), "剪切", self
         )
         cut_action.setStatusTip("剪切选定内容..")
         cut_action.setShortcut(QKeySequence.Cut)
@@ -147,7 +150,7 @@ class MainWindow(QMainWindow):
         edit_menu.addAction(cut_action)
 
         copy_action = QAction(
-            QIcon(os.path.join("images", "document-copy.png")), "复制", self
+            QIcon(os.path.join("Typora/icon", "复制.png")), "复制", self
         )
         copy_action.setStatusTip("复制选定内容..")
         cut_action.setShortcut(QKeySequence.Copy)
@@ -156,7 +159,7 @@ class MainWindow(QMainWindow):
         edit_menu.addAction(copy_action)
 
         paste_action = QAction(
-            QIcon(os.path.join("images", "clipboard-paste-document-text.png")),
+            QIcon(os.path.join("Typora/icon", "粘贴.png")),
             "粘帖",
             self,
         )
@@ -167,7 +170,7 @@ class MainWindow(QMainWindow):
         edit_menu.addAction(paste_action)
 
         select_action = QAction(
-            QIcon(os.path.join("images", "selection-input.png")), "全选", self
+            QIcon(os.path.join("Typora/icon", "selection-input.png")), "全选", self
         )
         select_action.setStatusTip("全选所有文字..")
         cut_action.setShortcut(QKeySequence.SelectAll)
@@ -177,7 +180,7 @@ class MainWindow(QMainWindow):
         edit_menu.addSeparator()
 
         wrap_action = QAction(
-            QIcon(os.path.join("images", "arrow-continue.png")), "自动换行", self
+            QIcon(os.path.join("Typora/icon", "arrow-continue.png")), "自动换行", self
         )
         wrap_action.setStatusTip("当文字长度超过边框大小时自动换行..")
         wrap_action.setCheckable(True)
@@ -202,7 +205,7 @@ class MainWindow(QMainWindow):
         format_toolbar.addWidget(self.fontsize)
 
         self.bold_action = QAction(
-            QIcon(os.path.join("images", "edit-bold.png")), "加粗", self
+            QIcon(os.path.join("Typora/icon", "edit-bold.png")), "加粗", self
         )
         self.bold_action.setStatusTip("加粗选定内容..")
         self.bold_action.setShortcut(QKeySequence.Bold)
@@ -214,7 +217,7 @@ class MainWindow(QMainWindow):
         format_menu.addAction(self.bold_action)
 
         self.italic_action = QAction(
-            QIcon(os.path.join("images", "edit-italic.png")), "斜体", self
+            QIcon(os.path.join("Typora/icon", "edit-italic.png")), "斜体", self
         )
         self.italic_action.setStatusTip("将选定内容设为斜体..")
         self.italic_action.setShortcut(QKeySequence.Italic)
@@ -224,7 +227,7 @@ class MainWindow(QMainWindow):
         format_menu.addAction(self.italic_action)
 
         self.underline_action = QAction(
-            QIcon(os.path.join("images", "edit-underline.png")), "下划线", self
+            QIcon(os.path.join("Typora/icon", "edit-underline.png")), "下划线", self
         )
         self.underline_action.setStatusTip("将选定内容加下划线..")
         self.underline_action.setShortcut(QKeySequence.Underline)
@@ -236,7 +239,7 @@ class MainWindow(QMainWindow):
         format_menu.addSeparator()
 
         self.alignl_action = QAction(
-            QIcon(os.path.join("images", "edit-alignment.png")), "靠左对齐", self
+            QIcon(os.path.join("Typora/icon", "edit-alignment.png")), "靠左对齐", self
         )
         self.alignl_action.setStatusTip("将文本靠左对齐..")
         self.alignl_action.setCheckable(True)
@@ -247,7 +250,7 @@ class MainWindow(QMainWindow):
         format_menu.addAction(self.alignl_action)
 
         self.alignc_action = QAction(
-            QIcon(os.path.join("images", "edit-alignment-center.png")), "居中对齐", self
+            QIcon(os.path.join("Typora/icon", "edit-alignment-center.png")), "居中对齐", self
         )
         self.alignc_action.setStatusTip("将文本居中对齐..")
         self.alignc_action.setCheckable(True)
@@ -258,7 +261,7 @@ class MainWindow(QMainWindow):
         format_menu.addAction(self.alignc_action)
 
         self.alignr_action = QAction(
-            QIcon(os.path.join("images", "edit-alignment-right.png")), "靠右对齐", self
+            QIcon(os.path.join("Typora/icon", "edit-alignment-right.png")), "靠右对齐", self
         )
         self.alignr_action.setStatusTip("将文本靠右对齐..")
         self.alignr_action.setCheckable(True)
@@ -269,7 +272,7 @@ class MainWindow(QMainWindow):
         format_menu.addAction(self.alignr_action)
 
         self.alignj_action = QAction(
-            QIcon(os.path.join("images", "edit-alignment-justify.png")), "对齐", self
+            QIcon(os.path.join("Typora/icon", "edit-alignment-justify.png")), "对齐", self
         )
         self.alignj_action.setStatusTip("分散对齐文本..")
         self.alignj_action.setCheckable(True)
