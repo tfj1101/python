@@ -61,6 +61,8 @@ class MainWindow(QMainWindow):
 
         layout = QVBoxLayout()
         self.editor = QTextEdit()
+        self.setWindowIcon(QIcon("D:/python_study/python课程设计/Typora/icon/img.png"))
+
         self.editor.setAutoFormatting(QTextEdit.AutoAll)
         self.editor.selectionChanged.connect(self.update_format)
 
@@ -73,230 +75,225 @@ class MainWindow(QMainWindow):
         container = QWidget()
         container.setLayout(layout)
         self.setCentralWidget(container)
+        # self.setCentralWidget(self.editor)
         # self.status = QStatusBar()
         # self.setStatusBar(self.status)
 
-        file_toolbar = QToolBar("文件")
-        file_toolbar.setIconSize(QSize(25, 25))
-        self.addToolBar(file_toolbar)
-        file_menu = self.menuBar().addMenu("&文件")
+        文件工具栏 = QToolBar("文件")
+        文件工具栏.setIconSize(QSize(20, 20))
+        self.addToolBar(文件工具栏)
+        文件菜单 = self.menuBar().addMenu("&文件")
 
-        open_file_action = QAction(
+        打开_action = QAction(
             QIcon("D:/python_study/python课程设计/Typora/icon/打开文件.png"),
             "打开文件",
             self,
         )
-        open_file_action.setStatusTip("从本地磁盘中读取文件..")
-        open_file_action.triggered.connect(self.file_open)
-        file_menu.addAction(open_file_action)
-        file_toolbar.addAction(open_file_action)
+        打开_action.setStatusTip("从本地磁盘中读取文件..")
+        打开_action.triggered.connect(self.file_open)
+        文件菜单.addAction(打开_action)
+        文件工具栏.addAction(打开_action)
 
-        save_file_action = QAction(
+        保存_action = QAction(
             QIcon(os.path.join("Typora/icon", "保存文件.png")), "保存", self
         )
+        # print(os.path.join("Typora/icon", "保存文件.png"))
+        保存_action.setStatusTip("保存到本地磁盘..")
+        保存_action.triggered.connect(self.file_save)
+        文件菜单.addAction(保存_action)
+        文件工具栏.addAction(保存_action)
 
-        print(os.path.join("Typora/icon", "保存文件.png"))
-        save_file_action.setStatusTip("保存到本地磁盘..")
-        save_file_action.triggered.connect(self.file_save)
-        file_menu.addAction(save_file_action)
-        file_toolbar.addAction(save_file_action)
-
-        saveas_file_action = QAction(
+        另存为_action = QAction(
             QIcon(os.path.join("Typora/icon", "另存为.png")), "另存为",
             self
         )
-        saveas_file_action.setStatusTip("另存为文件..")
-        saveas_file_action.triggered.connect(self.file_saveas)
-        file_menu.addAction(saveas_file_action)
-        file_toolbar.addAction(saveas_file_action)
+        另存为_action.setStatusTip("另存为文件..")
+        另存为_action.triggered.connect(self.file_saveas)
+        文件菜单.addAction(另存为_action)
+        文件工具栏.addAction(另存为_action)
 
-        # print_action = QAction(
-        #     QIcon(os.path.join("images", "printer.png")), "打印", self
-        # )
-        # print_action.setStatusTip("打印本页..")
-        # print_action.triggered.connect(self.file_print)
-        # file_menu.addAction(print_action)
-        # file_toolbar.addAction(print_action)
+        编辑工具栏 = QToolBar("编辑")
+        编辑工具栏.setIconSize(QSize(20, 20))
+        self.addToolBar(编辑工具栏)
+        编辑菜单 = self.menuBar().addMenu("&编辑")
 
-        edit_toolbar = QToolBar("编辑")
-        edit_toolbar.setIconSize(QSize(20, 20))
-        self.addToolBar(edit_toolbar)
-        edit_menu = self.menuBar().addMenu("&编辑")
-
-        undo_action = QAction(
+        撤回_action = QAction(
             QIcon(os.path.join("Typora/icon", "撤回.png")), "撤回", self
         )
-        undo_action.setStatusTip("撤回上一个操作..")
-        undo_action.triggered.connect(self.editor.undo)
-        edit_menu.addAction(undo_action)
+        撤回_action.setStatusTip("撤回上一个操作..")
+        撤回_action.triggered.connect(self.editor.undo)
+        编辑菜单.addAction(撤回_action)
 
-        redo_action = QAction(
+        重做_action = QAction(
             QIcon(os.path.join("Typora/icon", "重做.png")), "重做", self
         )
-        redo_action.setStatusTip("重做撤回的操作..")
-        redo_action.triggered.connect(self.editor.redo)
-        edit_toolbar.addAction(redo_action)
-        edit_menu.addAction(redo_action)
+        重做_action.setStatusTip("重做撤回的操作..")
+        重做_action.triggered.connect(self.editor.redo)
+        编辑工具栏.addAction(重做_action)
+        编辑菜单.addAction(重做_action)
 
-        edit_menu.addSeparator()
+        编辑菜单.addSeparator()
 
-        cut_action = QAction(
+        剪切_action = QAction(
             QIcon(os.path.join("Typora/icon", "剪切.png")), "剪切", self
         )
-        cut_action.setStatusTip("剪切选定内容..")
-        cut_action.setShortcut(QKeySequence.Cut)
-        cut_action.triggered.connect(self.editor.cut)
-        edit_toolbar.addAction(cut_action)
-        edit_menu.addAction(cut_action)
+        剪切_action.setStatusTip("剪切选定内容..")
+        剪切_action.setShortcut(QKeySequence.Cut)
+        剪切_action.triggered.connect(self.editor.cut)
+        编辑工具栏.addAction(剪切_action)
+        编辑菜单.addAction(剪切_action)
 
-        copy_action = QAction(
+        复制_action = QAction(
             QIcon(os.path.join("Typora/icon", "复制.png")), "复制", self
         )
-        copy_action.setStatusTip("复制选定内容..")
-        cut_action.setShortcut(QKeySequence.Copy)
-        copy_action.triggered.connect(self.editor.copy)
-        edit_toolbar.addAction(copy_action)
-        edit_menu.addAction(copy_action)
+        复制_action.setStatusTip("复制选定内容..")
+        剪切_action.setShortcut(QKeySequence.Copy)
+        复制_action.triggered.connect(self.editor.copy)
+        编辑工具栏.addAction(复制_action)
+        编辑菜单.addAction(复制_action)
 
-        paste_action = QAction(
+        粘贴_action = QAction(
             QIcon(os.path.join("Typora/icon", "粘贴.png")),
             "粘帖",
             self,
         )
-        paste_action.setStatusTip("从剪贴板粘帖..")
-        cut_action.setShortcut(QKeySequence.Paste)
-        paste_action.triggered.connect(self.editor.paste)
-        edit_toolbar.addAction(paste_action)
-        edit_menu.addAction(paste_action)
+        粘贴_action.setStatusTip("从剪贴板粘帖..")
+        剪切_action.setShortcut(QKeySequence.Paste)
+        粘贴_action.triggered.connect(self.editor.paste)
+        编辑工具栏.addAction(粘贴_action)
+        编辑菜单.addAction(粘贴_action)
 
-        select_action = QAction(
+        全选_action = QAction(
             QIcon(os.path.join("Typora/icon", "selection-input.png")), "全选", self
         )
-        select_action.setStatusTip("全选所有文字..")
-        cut_action.setShortcut(QKeySequence.SelectAll)
-        select_action.triggered.connect(self.editor.selectAll)
-        edit_menu.addAction(select_action)
+        全选_action.setStatusTip("全选所有文字..")
+        剪切_action.setShortcut(QKeySequence.SelectAll)
+        全选_action.triggered.connect(self.editor.selectAll)
+        编辑菜单.addAction(全选_action)
 
-        edit_menu.addSeparator()
+        编辑菜单.addSeparator()
 
-        wrap_action = QAction(
+        换行 = QAction(
             QIcon(os.path.join("Typora/icon", "arrow-continue.png")), "自动换行", self
         )
-        wrap_action.setStatusTip("当文字长度超过边框大小时自动换行..")
-        wrap_action.setCheckable(True)
-        wrap_action.setChecked(True)
-        wrap_action.triggered.connect(self.edit_toggle_wrap)
-        edit_menu.addAction(wrap_action)
+        换行.setStatusTip("当文字长度超过边框大小时自动换行..")
+        换行.setCheckable(True)
+        换行.setChecked(True)
+        换行.triggered.connect(self.edit_toggle_wrap)
+        编辑菜单.addAction(换行)
 
-        format_toolbar = QToolBar("格式")
-        format_toolbar.setIconSize(QSize(16, 16))
-        self.addToolBar(format_toolbar)
-        format_menu = self.menuBar().addMenu("&格式")
+        格式工具栏 = QToolBar("格式")
+        格式工具栏.setIconSize(QSize(20, 20))
+        self.addToolBar(格式工具栏)
+        格式菜单 = self.menuBar().addMenu("&格式")
 
-        self.fonts = QFontComboBox()
-        self.fonts.currentFontChanged.connect(self.editor.setCurrentFont)
-        format_toolbar.addWidget(self.fonts)
+        self.字体 = QFontComboBox()
+        self.字体.currentFontChanged.connect(self.editor.setCurrentFont)
+        格式工具栏.addWidget(self.字体)
 
-        self.fontsize = QComboBox()
-        self.fontsize.addItems([str(s) for s in FONT_SIZES])
-        self.fontsize.currentIndexChanged[str].connect(
+        self.字体大小 = QComboBox()
+        self.字体大小.addItems([str(s) for s in FONT_SIZES])
+        self.字体大小.currentIndexChanged[str].connect(
             lambda s: self.editor.setFontPointSize(float(s))
         )
-        format_toolbar.addWidget(self.fontsize)
+        格式工具栏.addWidget(self.字体大小)
 
-        self.bold_action = QAction(
-            QIcon(os.path.join("Typora/icon", "edit-bold.png")), "加粗", self
+        self.加粗 = QAction(
+            QIcon(os.path.join("Typora/icon", "字体加粗.png")), "加粗", self
         )
-        self.bold_action.setStatusTip("加粗选定内容..")
-        self.bold_action.setShortcut(QKeySequence.Bold)
-        self.bold_action.setCheckable(True)
-        self.bold_action.toggled.connect(
+        self.加粗.setStatusTip("加粗选定内容..")
+        self.加粗.setShortcut(QKeySequence.Bold)
+        self.加粗.setCheckable(True)
+        self.加粗.toggled.connect(
             lambda x: self.editor.setFontWeight(QFont.Bold if x else QFont.Normal)
         )
-        format_toolbar.addAction(self.bold_action)
-        format_menu.addAction(self.bold_action)
+        格式工具栏.addAction(self.加粗)
+        格式菜单.addAction(self.加粗)
 
-        self.italic_action = QAction(
-            QIcon(os.path.join("Typora/icon", "edit-italic.png")), "斜体", self
+        self.斜体 = QAction(
+            QIcon(os.path.join("Typora/icon", "字体斜体.png")), "斜体", self
         )
-        self.italic_action.setStatusTip("将选定内容设为斜体..")
-        self.italic_action.setShortcut(QKeySequence.Italic)
-        self.italic_action.setCheckable(True)
-        self.italic_action.toggled.connect(self.editor.setFontItalic)
-        format_toolbar.addAction(self.italic_action)
-        format_menu.addAction(self.italic_action)
+        self.斜体.setStatusTip("将选定内容设为斜体..")
+        self.斜体.setShortcut(QKeySequence.Italic)
+        self.斜体.setCheckable(True)
+        self.斜体.toggled.connect(self.editor.setFontItalic)
+        格式工具栏.addAction(self.斜体)
+        格式菜单.addAction(self.斜体)
 
-        self.underline_action = QAction(
-            QIcon(os.path.join("Typora/icon", "edit-underline.png")), "下划线", self
+        self.下划线 = QAction(
+            QIcon(os.path.join("Typora/icon", "字体下划线.png")), "下划线", self
         )
-        self.underline_action.setStatusTip("将选定内容加下划线..")
-        self.underline_action.setShortcut(QKeySequence.Underline)
-        self.underline_action.setCheckable(True)
-        self.underline_action.toggled.connect(self.editor.setFontUnderline)
-        format_toolbar.addAction(self.underline_action)
-        format_menu.addAction(self.underline_action)
+        self.下划线.setStatusTip("将选定内容加下划线..")
+        self.下划线.setShortcut(QKeySequence.Underline)
+        self.下划线.setCheckable(True)
+        self.下划线.toggled.connect(self.editor.setFontUnderline)
+        格式工具栏.addAction(self.下划线)
+        格式菜单.addAction(self.下划线)
 
-        format_menu.addSeparator()
+        格式菜单.addSeparator()
 
-        self.alignl_action = QAction(
-            QIcon(os.path.join("Typora/icon", "edit-alignment.png")), "靠左对齐", self
+        self.左对齐_action = QAction(
+            QIcon(os.path.join("Typora/icon", "左对齐.png")), "靠左对齐", self
         )
-        self.alignl_action.setStatusTip("将文本靠左对齐..")
-        self.alignl_action.setCheckable(True)
-        self.alignl_action.triggered.connect(
+        self.左对齐_action.setStatusTip("将文本靠左对齐..")
+        self.左对齐_action.setCheckable(True)
+        self.左对齐_action.triggered.connect(
             lambda: self.editor.setAlignment(Qt.AlignLeft)
         )
-        format_toolbar.addAction(self.alignl_action)
-        format_menu.addAction(self.alignl_action)
+        格式工具栏.addAction(self.左对齐_action)
+        格式菜单.addAction(self.左对齐_action)
 
-        self.alignc_action = QAction(
-            QIcon(os.path.join("Typora/icon", "edit-alignment-center.png")), "居中对齐", self
+        self.居中_action = QAction(
+            QIcon(os.path.join("Typora/icon", "居中对齐.png")), "居中对齐", self
         )
-        self.alignc_action.setStatusTip("将文本居中对齐..")
-        self.alignc_action.setCheckable(True)
-        self.alignc_action.triggered.connect(
+        self.居中_action.setStatusTip("将文本居中对齐..")
+        self.居中_action.setCheckable(True)
+        self.居中_action.triggered.connect(
             lambda: self.editor.setAlignment(Qt.AlignCenter)
         )
-        format_toolbar.addAction(self.alignc_action)
-        format_menu.addAction(self.alignc_action)
+        格式工具栏.addAction(self.居中_action)
+        格式菜单.addAction(self.居中_action)
 
-        self.alignr_action = QAction(
-            QIcon(os.path.join("Typora/icon", "edit-alignment-right.png")), "靠右对齐", self
+        self.右对齐_action = QAction(
+            QIcon(os.path.join("Typora/icon", "右对齐.png")), "靠右对齐", self
         )
-        self.alignr_action.setStatusTip("将文本靠右对齐..")
-        self.alignr_action.setCheckable(True)
-        self.alignr_action.triggered.connect(
+        self.右对齐_action.setStatusTip("将文本靠右对齐..")
+        self.右对齐_action.setCheckable(True)
+        self.右对齐_action.triggered.connect(
             lambda: self.editor.setAlignment(Qt.AlignRight)
         )
-        format_toolbar.addAction(self.alignr_action)
-        format_menu.addAction(self.alignr_action)
+        格式工具栏.addAction(self.右对齐_action)
+        格式菜单.addAction(self.右对齐_action)
 
-        self.alignj_action = QAction(
-            QIcon(os.path.join("Typora/icon", "edit-alignment-justify.png")), "对齐", self
+        self.左右对齐_action = QAction(
+            QIcon(os.path.join("Typora/icon", "左右对齐.png")),
+            "左右对齐",
+            self
         )
-        self.alignj_action.setStatusTip("分散对齐文本..")
-        self.alignj_action.setCheckable(True)
-        self.alignj_action.triggered.connect(
+        self.左右对齐_action.setStatusTip("分散对齐文本..")
+        self.左右对齐_action.setCheckable(True)
+        self.左右对齐_action.triggered.connect(
             lambda: self.editor.setAlignment(Qt.AlignJustify)
         )
-        format_toolbar.addAction(self.alignj_action)
-        format_menu.addAction(self.alignj_action)
+        格式工具栏.addAction(self.左右对齐_action)
+        格式菜单.addAction(self.左右对齐_action)
+        
+        # 单选框
+        对齐_group = QActionGroup(self)
+        对齐_group.setExclusive(True)
+        对齐_group.addAction(self.左对齐_action)
+        对齐_group.addAction(self.居中_action)
+        对齐_group.addAction(self.右对齐_action)
+        对齐_group.addAction(self.左右对齐_action)
 
-        format_group = QActionGroup(self)
-        format_group.setExclusive(True)
-        format_group.addAction(self.alignl_action)
-        format_group.addAction(self.alignc_action)
-        format_group.addAction(self.alignr_action)
-        format_group.addAction(self.alignj_action)
-
-        format_menu.addSeparator()
+        格式菜单.addSeparator()
 
         self._format_actions = [
-            self.fonts,
-            self.fontsize,
-            self.bold_action,
-            self.italic_action,
-            self.underline_action,
+            self.字体,
+            self.字体大小,
+            self.加粗,
+            self.斜体,
+            self.下划线,
         ]
         self.update_format()
         self.update_title()
@@ -308,15 +305,15 @@ class MainWindow(QMainWindow):
 
     def update_format(self):
         self.block_signals(self._format_actions, True)
-        self.fonts.setCurrentFont(self.editor.currentFont())
-        self.fontsize.setCurrentText(str(int(self.editor.fontPointSize())))
-        self.italic_action.setChecked(self.editor.fontItalic())
-        self.underline_action.setChecked(self.editor.fontUnderline())
-        self.bold_action.setChecked(self.editor.fontWeight() == QFont.Bold)
-        self.alignl_action.setChecked(self.editor.alignment() == Qt.AlignLeft)
-        self.alignc_action.setChecked(self.editor.alignment() == Qt.AlignCenter)
-        self.alignr_action.setChecked(self.editor.alignment() == Qt.AlignRight)
-        self.alignj_action.setChecked(self.editor.alignment() == Qt.AlignJustify)
+        self.字体.setCurrentFont(self.editor.currentFont())
+        self.字体大小.setCurrentText(str(int(self.editor.fontPointSize())))
+        self.斜体.setChecked(self.editor.fontItalic())
+        self.下划线.setChecked(self.editor.fontUnderline())
+        self.加粗.setChecked(self.editor.fontWeight() == QFont.Bold)
+        self.左对齐_action.setChecked(self.editor.alignment() == Qt.AlignLeft)
+        self.居中_action.setChecked(self.editor.alignment() == Qt.AlignCenter)
+        self.右对齐_action.setChecked(self.editor.alignment() == Qt.AlignRight)
+        self.左右对齐_action.setChecked(self.editor.alignment() == Qt.AlignJustify)
         self.block_signals(self._format_actions, False)
 
     def dialog_critical(self, s):
@@ -328,7 +325,7 @@ class MainWindow(QMainWindow):
     def file_open(self):
         path, _ = QFileDialog.getOpenFileName(
             self,
-            "Open file",
+            "打开文件",
             "",
             "HTML documents (*.html);Text documents (*.txt);All files (*.*)",
         )
@@ -359,7 +356,7 @@ class MainWindow(QMainWindow):
     def file_saveas(self):
         path, _ = QFileDialog.getSaveFileName(
             self,
-            "Save file",
+            "保存文件",
             "",
             "HTML documents (*.html);Text documents (*.txt);All files (*.*)",
         )
@@ -386,7 +383,7 @@ class MainWindow(QMainWindow):
 
     def update_title(self):
         self.setWindowTitle(
-            "%s - 轩氏记事本 XuanNotepad"
+            "%s - 文本编辑器"
             % (os.path.basename(self.path) if self.path else "Untitled")
         )
 
@@ -396,7 +393,7 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    app.setApplicationName("轩氏记事本 XuanNotepad")
+    app.setApplicationName("文本编辑器")
     window = MainWindow()
     window.resize(1300, 750)
     app.exec_()
